@@ -17,7 +17,6 @@ if (action === "update"){
 }
 
 
-
 button.onclick = async function () {
     if (action === "update") {
        let response = await fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/books?action=update", {

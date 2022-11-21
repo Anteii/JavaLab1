@@ -1,7 +1,8 @@
 package com.example.lab1.servlets;
 
-import com.example.lab1.dao.BuyBookDao;
-import com.example.lab1.model.BuyBook;
+import com.example.lab1.dao.PurchaseDAO;
+import com.example.lab1.model.Purchase;
+import jakarta.inject.Inject;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -9,20 +10,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "BuyBookServlet", value = "/buy-book")
-public class BuyBookServlet extends HttpServlet {
-    private BuyBookDao buyBookDao;
+public class PurchaseServlet extends HttpServlet {
 
-    public void init(){
-        try {
-            buyBookDao = new BuyBookDao();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @Inject
+    private PurchaseDAO purchaseDAO;
+
 
     private void send(int status, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
@@ -33,25 +28,19 @@ public class BuyBookServlet extends HttpServlet {
     }
 
     private void deleteRow(HttpServletRequest request, HttpServletResponse response, int id) throws IOException {
-        int result = 0;
-        try {
-            result = buyBookDao.deleteBuyBook(id);
-        } catch (Exception ignored) {
-
-        }
+        int result = purchaseDAO.removeById(id);
         send(result, response);
     }
 
     private void updateRow(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
-        BuyBook buyBook = new BuyBook(obj.getInt("id"), obj.getInt("bookId"), obj.getInt("clientId"),
+
+        Purchase purchase = purchaseDAO.findByID(obj.getInt("id"));
+        purchase.update(obj.getInt("bookId"), obj.getInt("clientId"),
                 obj.getInt("amount"));
-        int result = 0;
-        try {
-            result = buyBookDao.updateBuyBook(buyBook);
-        } catch (Exception ignored) {
-        }
+
+        int result = purchaseDAO.update(purchase);
 
         send(result, response);
     }
@@ -59,14 +48,13 @@ public class BuyBookServlet extends HttpServlet {
     private void insertRow(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
-        BuyBook buyBook = new BuyBook(obj.getInt("bookId"), obj.getInt("clientId"),
-                obj.getInt("amount"));
-        int result = 0;
-        try {
-            result = buyBookDao.insertBuyBook(buyBook);
-        } catch (Exception ignored) {
 
-        }
+        Purchase purchase = new Purchase();
+        purchase.update(obj.getInt("bookId"), obj.getInt("clientId"),
+                obj.getInt("amount"));
+
+        int result = purchaseDAO.create(purchase);
+
         send(result, response);
     }
 

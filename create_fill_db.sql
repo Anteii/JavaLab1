@@ -16,7 +16,7 @@ create table client(
                        client_email varchar(50) not null
 );
 
-create table buy_book(
+create table purchase(
                          buy_book_id int default nextval('buy_book_seq_id') primary key,
                          book_id int references book(book_id),
                          client_id int references client(client_id),
@@ -33,6 +33,6 @@ insert into client (client_name, city_name, client_email) VALUES ('Dima', 'Buzul
 insert into client (client_name, city_name, client_email) VALUES ('Andrey', 'Samara', 'andrey@gmail.com');
 insert into client (client_name, city_name, client_email) VALUES ('Vasya', 'Moscow', 'vasya@gmail.com');
 
-insert into buy_book (book_id, client_id, amount) VALUES (1, 1, 14);
-insert into buy_book (book_id, client_id, amount) VALUES (1, 2, 4);
-insert into buy_book (book_id, client_id, amount) VALUES (3, 2, 5);
+insert into purchase (book_id, client_id, amount) VALUES (1, 1, 14);
+insert into purchase (book_id, client_id, amount) VALUES (1, 2, 4);
+insert into purchase (book_id, client_id, amount) VALUES (3, 2, 5);

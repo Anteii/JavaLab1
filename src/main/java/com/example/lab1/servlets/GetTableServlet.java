@@ -1,8 +1,10 @@
 package com.example.lab1.servlets;
 
-import com.example.lab1.dao.BookDao;
-import com.example.lab1.dao.BuyBookDao;
-import com.example.lab1.dao.ClientDao;
+import com.example.lab1.dao.BookDAO;
+import com.example.lab1.dao.ClientDAO;
+import com.example.lab1.dao.PurchaseDAO;
+import com.google.gson.Gson;
+import jakarta.inject.Inject;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -14,54 +16,27 @@ import java.util.List;
 @WebServlet(name = "GetTableServlet", value = "/GetTableServlet")
 public class GetTableServlet extends HttpServlet {
 
-    private BookDao bookDao;
-    private ClientDao clientDao;
-    private BuyBookDao buyBookDao;
-
-    public void init(){
-        try {
-            bookDao = new BookDao();
-            clientDao = new ClientDao();
-            buyBookDao = new BuyBookDao();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @Inject
+    private BookDAO bookDAO;
+    @Inject
+    private ClientDAO clientDAO;
+    @Inject
+    private PurchaseDAO purchaseDAO;
 
     public String getJson(List<?> array){
-        StringBuilder str = new StringBuilder("[");
-        String prefix = "";
-        for (Object obj: array){
-            str.append(prefix);
-            str.append(obj.toString());
-            prefix = ",";
-        }
-        str.append("]");
-        return str.toString();
+        return new Gson().toJson(array);
     }
 
     private String sendBooks(){
-        try {
-            return getJson(bookDao.getAllBooks());
-        } catch (Exception e){
-            throw new RuntimeException();
-        }
+        return getJson(bookDAO.getAllBooks());
     }
 
     private String sendClients(){
-        try {
-            return getJson(clientDao.getAllClients());
-        } catch (Exception e){
-            throw new RuntimeException();
-        }
+        return getJson(clientDAO.getAllClients());
     }
 
     private String sendBuyBook(){
-        try {
-            return getJson(buyBookDao.getAllBuyBooks());
-        } catch (Exception e){
-            throw new RuntimeException();
-        }
+        return getJson(purchaseDAO.getAllPurchases());
     }
 
     @Override

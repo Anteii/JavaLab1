@@ -1,7 +1,8 @@
 package com.example.lab1.servlets;
 
-import com.example.lab1.dao.ClientDao;
+import com.example.lab1.dao.ClientDAO;
 import com.example.lab1.model.Client;
+import jakarta.inject.Inject;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -9,23 +10,13 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "ClientsServlet", value = "/clients")
 public class ClientsServlet extends HttpServlet {
 
-
-
-    private ClientDao clientDao;
-
-    public void init(){
-        try {
-            clientDao = new ClientDao();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @Inject
+    private ClientDAO clientDAO;
 
     private void send(int status, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
@@ -36,25 +27,20 @@ public class ClientsServlet extends HttpServlet {
     }
 
     private void deleteRow(HttpServletRequest request, HttpServletResponse response, int id) throws IOException {
-        int result = 0;
-        try {
-            result = clientDao.deleteClient(id);
-        } catch (Exception ignored) {
 
-        }
+        int result = clientDAO.removeById(id);
         send(result, response);
     }
 
     private void updateRow(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
-        Client client = new Client(obj.getInt("id"), obj.getString("clientName"), obj.getString("cityName"),
+
+        Client client = clientDAO.findByID(obj.getInt("id"));
+        client.update(obj.getString("clientName"), obj.getString("cityName"),
                 obj.getString("clientEmail"));
-        int result = 0;
-        try {
-            result = clientDao.updateClient(client);
-        } catch (Exception ignored) {
-        }
+
+        int result = clientDAO.update(client);
 
         send(result, response);
     }
@@ -62,14 +48,13 @@ public class ClientsServlet extends HttpServlet {
     private void insertRow(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
-        Client client = new Client(obj.getString("clientName"), obj.getString("cityName"),
-                obj.getString("clientEmail"));
-        int result = 0;
-        try {
-            result = clientDao.insertClient(client);
-        } catch (Exception ignored) {
 
-        }
+        Client client = new Client();
+        client.update(obj.getString("clientName"), obj.getString("cityName"),
+                obj.getString("clientEmail"));
+
+        int result = clientDAO.create(client);
+
         send(result, response);
     }
 

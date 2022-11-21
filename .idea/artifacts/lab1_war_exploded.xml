@@ -19,7 +19,25 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.14.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.14.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.14.0" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-core-jakarta:5.6.14.Final" />
+          <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.4.3.Final" />
+          <element id="library" level="project" name="Maven: jakarta.persistence:jakarta.persistence-api:3.0.0" />
+          <element id="library" level="project" name="Maven: net.bytebuddy:byte-buddy:1.12.18" />
+          <element id="library" level="project" name="Maven: antlr:antlr:2.7.7" />
+          <element id="library" level="project" name="Maven: jakarta.transaction:jakarta.transaction-api:2.0.0" />
+          <element id="library" level="project" name="Maven: org.jboss:jandex:2.4.2.Final" />
+          <element id="library" level="project" name="Maven: com.fasterxml:classmate:1.5.1" />
+          <element id="library" level="project" name="Maven: jakarta.activation:jakarta.activation-api:2.0.1" />
+          <element id="library" level="project" name="Maven: org.dom4j:dom4j:2.1.3" />
+          <element id="library" level="project" name="Maven: org.hibernate.common:hibernate-commons-annotations:5.1.2.Final" />
+          <element id="library" level="project" name="Maven: jakarta.xml.bind:jakarta.xml.bind-api:3.0.1" />
+          <element id="library" level="project" name="Maven: com.sun.activation:jakarta.activation:2.0.1" />
+          <element id="library" level="project" name="Maven: org.glassfish.jaxb:jaxb-runtime:3.0.0" />
+          <element id="library" level="project" name="Maven: org.glassfish.jaxb:jaxb-core:3.0.0" />
+          <element id="library" level="project" name="Maven: org.glassfish.jaxb:txw2:3.0.0" />
+          <element id="library" level="project" name="Maven: com.sun.istack:istack-commons-runtime:4.0.0" />
           <element id="library" level="project" name="Maven: org.json:json:20220924" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.2.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">

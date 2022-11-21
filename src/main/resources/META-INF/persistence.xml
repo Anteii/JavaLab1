@@ -4,6 +4,18 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
     <persistence-unit name="default">
-
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>jdbc/lszfngcv</jta-data-source>
+        <class>com.example.lab1.model.Book</class>
+        <class>com.example.lab1.model.Purchase</class>
+        <class>com.example.lab1.model.Client</class>
+        <properties>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+            <property name="hibernate.default_schema" value="public"/>
+            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:postgresql://ella.db.elephantsql.com/lszfngcv"/>
+            <property name="hibernate.connection.username" value="lszfngcv"/>
+            <property name="hibernate.connection.password" value="6VybNmhMnVB5SSCV7XxSyDOt5O2MaKwh"/>
+        </properties>
     </persistence-unit>
 </persistence>
