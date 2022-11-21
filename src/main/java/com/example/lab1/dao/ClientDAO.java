@@ -1,25 +1,23 @@
 package com.example.lab1.dao;
 
 import com.example.lab1.model.Client;
-import jakarta.annotation.Resource;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.inject.Model;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import jakarta.transaction.UserTransaction;
-
 import java.io.Serializable;
 import java.util.List;
 
-@Model
+@Stateless
 public class ClientDAO implements Serializable {
     @PersistenceContext(unitName = "default")
     private EntityManager em;
-    @Resource
-    UserTransaction utx;
+
 
     public Client findByID(Integer id) {
         return em.find(Client.class, id);
@@ -35,28 +33,28 @@ public class ClientDAO implements Serializable {
     }
 
     public int removeById(Integer id){
-        try {
-            utx.begin();
-            em.remove(findByID(id));
-            utx.commit();
-        } catch (Exception e) {
-            return 0;
-        }
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        em.remove(findByID(id));
+        transaction.commit();
+
         return 1;
     }
 
     public int create(Client client){
-        try {
-            utx.begin();
-            em.persist(client);
-            utx.commit();
-        } catch (Exception e) {
-            return 0;
-        }
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        em.persist(client);
+        transaction.commit();
+
         return 1;
     }
 
     public int update(Client client){
-        return create(client);
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        em.merge(client);
+        transaction.commit();
+        return 1;
     }
 }

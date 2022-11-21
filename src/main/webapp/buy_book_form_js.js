@@ -45,7 +45,13 @@ button.onclick = async function () {
                 clientId: clientId.value,
                 amount: amount.value,
             })
-        }).then(data => data.json());
+        }).then(function(response){
+            if(response.ok)
+            {
+                return response => response.json();
+            }
+            throw new Error('Something went wrong.');
+        }).catch(reason => alert(reason));
         console.log(response);
         let success = response.success;
         console.log(success);
