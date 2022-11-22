@@ -2,6 +2,11 @@
 ### Data Domain
 I choose library domain simple yet interesting (at least i thought so).
 
+<p align="center">
+  Data Scheme<br>
+  <img width="600" height="200" src="https://github.com/Anteii/JavaLab1/blob/main/schema.png">
+</p>
+
 ### Database
 In this work I use free remote hosting ElephantSQL (Azure Postrgre instance)
 
