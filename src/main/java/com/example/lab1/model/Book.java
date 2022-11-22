@@ -1,8 +1,8 @@
 package com.example.lab1.model;
 
 import jakarta.persistence.*;
-
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class Book implements Serializable {
@@ -77,13 +77,11 @@ public class Book implements Serializable {
 
         Book book = (Book) o;
 
-        if (id != null ? !id.equals(book.id) : book.id != null) return false;
-        if (title != null ? !title.equals(book.title) : book.title != null) return false;
-        if (authorName != null ? !authorName.equals(book.authorName) : book.authorName != null) return false;
-        if (genre != null ? !genre.equals(book.genre) : book.genre != null) return false;
-        if (price != null ? !price.equals(book.price) : book.price != null) return false;
-
-        return true;
+        if (!Objects.equals(id, book.id)) return false;
+        if (!Objects.equals(title, book.title)) return false;
+        if (!Objects.equals(authorName, book.authorName)) return false;
+        if (!Objects.equals(genre, book.genre)) return false;
+        return Objects.equals(price, book.price);
     }
 
     @Override

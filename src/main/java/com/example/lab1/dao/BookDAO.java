@@ -3,17 +3,14 @@ package com.example.lab1.dao;
 import com.example.lab1.model.Book;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import jakarta.transaction.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.function.Consumer;
 
 
 @Stateless

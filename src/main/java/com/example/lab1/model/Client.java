@@ -2,6 +2,8 @@ package com.example.lab1.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,12 +65,10 @@ public class Client {
 
         Client client = (Client) o;
 
-        if (id != null ? !id.equals(client.id) : client.id != null) return false;
-        if (name != null ? !name.equals(client.name) : client.name != null) return false;
-        if (city != null ? !city.equals(client.city) : client.city != null) return false;
-        if (email != null ? !email.equals(client.email) : client.email != null) return false;
-
-        return true;
+        if (!Objects.equals(id, client.id)) return false;
+        if (!Objects.equals(name, client.name)) return false;
+        if (!Objects.equals(city, client.city)) return false;
+        return Objects.equals(email, client.email);
     }
 
     @Override

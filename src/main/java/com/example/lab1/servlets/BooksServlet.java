@@ -59,7 +59,6 @@ public class BooksServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         String action = request.getParameter("action");
         switch (action){
             case "delete":

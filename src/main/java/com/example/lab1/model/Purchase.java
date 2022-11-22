@@ -2,6 +2,8 @@ package com.example.lab1.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,12 +65,10 @@ public class Purchase {
 
         Purchase purchase = (Purchase) o;
 
-        if (id != null ? !id.equals(purchase.id) : purchase.id != null) return false;
-        if (bookId != null ? !bookId.equals(purchase.bookId) : purchase.bookId != null) return false;
-        if (clientId != null ? !clientId.equals(purchase.clientId) : purchase.clientId != null) return false;
-        if (amount != null ? !amount.equals(purchase.amount) : purchase.amount != null) return false;
-
-        return true;
+        if (!Objects.equals(id, purchase.id)) return false;
+        if (!Objects.equals(bookId, purchase.bookId)) return false;
+        if (!Objects.equals(clientId, purchase.clientId)) return false;
+        return Objects.equals(amount, purchase.amount);
     }
 
     @Override
