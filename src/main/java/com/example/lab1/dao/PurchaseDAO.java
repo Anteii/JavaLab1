@@ -2,7 +2,6 @@ package com.example.lab1.dao;
 
 import com.example.lab1.model.Purchase;
 import jakarta.ejb.Stateless;
-import jakarta.enterprise.inject.Model;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
