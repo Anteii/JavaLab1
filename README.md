@@ -3,8 +3,8 @@
 I choose library domain simple yet interesting (at least i thought so).
 
 <p align="center">
-  Data Scheme
-  <img width="600" height="400" src="https://github.com/Anteii/JavaLab1/blob/main/schema.png">
+  Data Scheme<br>
+  <img width="600" height="200" src="https://github.com/Anteii/JavaLab1/blob/main/schema.png">
 </p>
 
 ### Database
