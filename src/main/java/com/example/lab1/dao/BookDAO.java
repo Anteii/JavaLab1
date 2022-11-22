@@ -9,9 +9,11 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 @Stateless
@@ -33,23 +35,14 @@ public class BookDAO implements Serializable {
     }
 
     public void removeById(Integer id) {
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.remove(findByID(id));
-        transaction.commit();
     }
 
     public void create(Book book){
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.persist(book);
-        transaction.commit();
     }
 
     public void update(Book book){
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.merge(book);
-        transaction.commit();
     }
 }

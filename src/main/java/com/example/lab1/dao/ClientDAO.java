@@ -18,7 +18,6 @@ public class ClientDAO implements Serializable {
     @PersistenceContext(unitName = "default")
     private EntityManager em;
 
-
     public Client findByID(Integer id) {
         return em.find(Client.class, id);
     }
@@ -33,23 +32,14 @@ public class ClientDAO implements Serializable {
     }
 
     public void removeById(Integer id){
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.remove(findByID(id));
-        transaction.commit();
     }
 
     public void create(Client client){
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.persist(client);
-        transaction.commit();
     }
 
     public void update(Client client){
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.merge(client);
-        transaction.commit();
     }
 }

@@ -32,23 +32,14 @@ public class PurchaseDAO implements Serializable {
     }
 
     public void removeById(Integer id){
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.remove(findByID(id));
-        transaction.commit();
     }
 
     public void create(Purchase purchase){
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.persist(purchase);
-        transaction.commit();
     }
 
     public void update(Purchase purchase){
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.merge(purchase);
-        transaction.commit();
     }
 }
