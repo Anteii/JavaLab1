@@ -1,11 +1,12 @@
 package com.example.lab1.servlets;
 
-import com.example.lab1.dao.PurchaseDAO;
-import com.example.lab1.model.Purchase;
+import com.example.lab1.controller.PurchaseController;
 import jakarta.inject.Inject;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public class PurchaseServlet extends HttpServlet {
 
     @Inject
-    private PurchaseDAO purchaseDAO;
+    private PurchaseController purchaseController;
 
     private void send(int status, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
@@ -27,29 +28,23 @@ public class PurchaseServlet extends HttpServlet {
     }
 
     private void deleteRow(int id) {
-        purchaseDAO.removeById(id);
+        purchaseController.removeClient(id);
     }
 
     private void updateRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
 
-        Purchase purchase = purchaseDAO.findByID(obj.getInt("id"));
-        purchase.update(obj.getInt("bookId"), obj.getInt("clientId"),
+        purchaseController.updatePurchase(obj.getInt("id"), obj.getInt("bookId"), obj.getInt("clientId"),
                 obj.getInt("amount"));
-
-        purchaseDAO.update(purchase);
     }
 
     private void insertRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
 
-        Purchase purchase = new Purchase();
-        purchase.update(obj.getInt("bookId"), obj.getInt("clientId"),
+        purchaseController.createPurchase(obj.getInt("bookId"), obj.getInt("clientId"),
                 obj.getInt("amount"));
-
-        purchaseDAO.create(purchase);
     }
 
     @Override

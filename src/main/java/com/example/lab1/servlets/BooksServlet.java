@@ -1,11 +1,12 @@
 package com.example.lab1.servlets;
 
-import com.example.lab1.dao.BookDAO;
-import com.example.lab1.model.Book;
+import com.example.lab1.controller.BookController;
 import jakarta.inject.Inject;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public class BooksServlet extends HttpServlet {
 
     @Inject
-    private BookDAO bookDAO;
+    private BookController bookController;
 
     private void send(int status, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
@@ -27,29 +28,22 @@ public class BooksServlet extends HttpServlet {
     }
 
     private void deleteRow(int id) {
-        bookDAO.removeById(id);
+        bookController.removeBook(id);
     }
 
     private void updateRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
-
-        Book book = bookDAO.findByID(obj.getInt("id"));
-        book.update(obj.getString("title"),
+        bookController.updateBook(obj.getInt("id"), obj.getString("title"),
                 obj.getString("authorName"), obj.getString("genre"), obj.getDouble("price"));
-
-        bookDAO.update(book);
     }
 
     private void insertRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
 
-        Book book = new Book();
-        book.update(obj.getString("title"), obj.getString("authorName"),
+        bookController.createBook(obj.getString("title"), obj.getString("authorName"),
                 obj.getString("genre"), obj.getDouble("price"));
-
-        bookDAO.create(book);
     }
 
     @Override

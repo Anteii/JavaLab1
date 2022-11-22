@@ -1,11 +1,12 @@
 package com.example.lab1.servlets;
 
-import com.example.lab1.dao.ClientDAO;
-import com.example.lab1.model.Client;
+import com.example.lab1.controller.ClientController;
 import jakarta.inject.Inject;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public class ClientsServlet extends HttpServlet {
 
     @Inject
-    private ClientDAO clientDAO;
+    private ClientController clientController;
 
     private void send(int status, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
@@ -27,29 +28,23 @@ public class ClientsServlet extends HttpServlet {
     }
 
     private void deleteRow(int id) {
-        clientDAO.removeById(id);
+        clientController.removeClient(id);
     }
 
     private void updateRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
 
-        Client client = clientDAO.findByID(obj.getInt("id"));
-        client.update(obj.getString("name"), obj.getString("city"),
+        clientController.updateClient(obj.getInt("id"), obj.getString("name"), obj.getString("city"),
                 obj.getString("email"));
-
-        clientDAO.update(client);
     }
 
     private void insertRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
 
-        Client client = new Client();
-        client.update(obj.getString("name"), obj.getString("city"),
+        clientController.createClient(obj.getString("name"), obj.getString("city"),
                 obj.getString("email"));
-
-        clientDAO.create(client);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.example.lab1.servlets;
 
-import com.example.lab1.dao.BookDAO;
-import com.example.lab1.dao.ClientDAO;
-import com.example.lab1.dao.PurchaseDAO;
+import com.example.lab1.controller.BookController;
+import com.example.lab1.controller.ClientController;
+import com.example.lab1.controller.PurchaseController;
 import com.google.gson.Gson;
 import jakarta.inject.Inject;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,26 +17,26 @@ import java.util.List;
 public class GetTableServlet extends HttpServlet {
 
     @Inject
-    private BookDAO bookDAO;
+    private BookController bookController;
     @Inject
-    private ClientDAO clientDAO;
+    private ClientController clientController;
     @Inject
-    private PurchaseDAO purchaseDAO;
+    private PurchaseController purchaseController;
 
     public String getJson(List<?> array){
         return new Gson().toJson(array);
     }
 
     private String sendBooks(){
-        return getJson(bookDAO.getAllBooks());
+        return getJson(bookController.getAllBooks());
     }
 
     private String sendClients(){
-        return getJson(clientDAO.getAllClients());
+        return getJson(clientController.getAllClients());
     }
 
     private String sendBuyBook(){
-        return getJson(purchaseDAO.getAllPurchases());
+        return getJson(purchaseController.getAllPurchases());
     }
 
     @Override
