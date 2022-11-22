@@ -1,7 +1,6 @@
 package com.example.lab1.controller;
 
 import com.example.lab1.dao.PurchaseDAO;
-import com.example.lab1.model.Client;
 import com.example.lab1.model.Purchase;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;

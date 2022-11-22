@@ -4,10 +4,6 @@ import com.example.lab1.dao.BookDAO;
 import com.example.lab1.model.Book;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 
 import java.util.List;
 
