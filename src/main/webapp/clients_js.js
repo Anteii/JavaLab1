@@ -20,40 +20,41 @@ fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/GetTableServlet?table=client")
         `
         data.map(value => {
             table_data += `<tr>
-            <td>${value.clientId}</td>
-            <td>${value.clientName}</td>
-            <td>${value.cityName}</td>
-            <td>${value.clientEmail}</td>
-            <td> <a id="delete${value.clientId}" onclick="window.delete_client(${value.clientId})"> Удалить клиента </a></td>
-            <td> <a id="update${value.clientId}" onclick="window.update_client(${value.clientId}, \'${value.clientName}\', \'${value.cityName}\',
-                                                                           \'${value.clientEmail}\')"> Изменить клиента </td>
+            <td>${value.id}</td>
+            <td>${value.name}</td>
+            <td>${value.city}</td>
+            <td>${value.email}</td>
+            <td> <a id="delete${value.id}" onclick="window.delete_client(${value.id})"> Удалить клиента </a></td>
+            <td> <a id="update${value.id}" onclick="window.update_client(${value.id}, \'${value.name}\', \'${value.city}\',
+                                                                           \'${value.email}\')"> Изменить клиента </td>
             </tr>`;
         });
         table.insertAdjacentHTML("afterbegin", table_head)
         document.getElementById("clients-body").innerHTML=table_data;
     })
 
-function update_client(clientId, clientName, cityName, clientEmail){
+function update_client(id, name, city, email){
     localStorage.setItem("action", "update");
-    localStorage.setItem("clientId", clientId);
-    localStorage.setItem("clientName", clientName);
-    localStorage.setItem("cityName", cityName);
-    localStorage.setItem("clientEmail", clientEmail);
+    localStorage.setItem("id", id);
+    localStorage.setItem("name", name);
+    localStorage.setItem("city", city);
+    localStorage.setItem("email", email);
     location.href="client_form.html";
 }
 
-async function delete_client(clientId) {
-    let response = await fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/clients?action=delete&id=" + clientId, {
+async function delete_client(id) {
+    await fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/clients?action=delete&id=" + id, {
         method: "POST"
-    }).then(data => data.json());
-    let success = response.success;
-    if (success === "1"){
-        let delete_row = document.getElementById("delete" + clientId);
-        delete_row = delete_row.closest("tr");
-        delete_row.remove();
-    } else {
-        alert("Не удалось удалить строку");
-    }
+    }).then(function(response){
+        if(response.ok){
+            let delete_row = document.getElementById("delete" + id);
+            delete_row = delete_row.closest("tr");
+            delete_row.remove();
+            return response => response.json();
+        }
+        else throw new Error('Can\'t delete client');
+    })
+        .catch(reason => alert(reason));
 }
 
 button.onclick = function () {

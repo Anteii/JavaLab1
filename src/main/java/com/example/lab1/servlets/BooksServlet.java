@@ -26,14 +26,11 @@ public class BooksServlet extends HttpServlet {
         out.flush();
     }
 
-    private void deleteRow(HttpServletRequest request, HttpServletResponse response, int id) throws IOException {
-        // delete bookById
-        int result = 0;
-        result = bookDAO.removeById(id);
-        send(result, response);
+    private void deleteRow(int id) {
+        bookDAO.removeById(id);
     }
 
-    private void updateRow(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void updateRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
 
@@ -41,12 +38,10 @@ public class BooksServlet extends HttpServlet {
         book.update(obj.getString("title"),
                 obj.getString("authorName"), obj.getString("genre"), obj.getDouble("price"));
 
-        int result = bookDAO.update(book);
-
-        send(result, response);
+        bookDAO.update(book);
     }
 
-    private void insertRow(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void insertRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
 
@@ -54,9 +49,7 @@ public class BooksServlet extends HttpServlet {
         book.update(obj.getString("title"), obj.getString("authorName"),
                 obj.getString("genre"), obj.getDouble("price"));
 
-        int result = bookDAO.create(book);
-
-        send(result, response);
+        bookDAO.create(book);
     }
 
     @Override
@@ -65,18 +58,18 @@ public class BooksServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String action = request.getParameter("action");
         switch (action){
             case "delete":
-                deleteRow(request, response, Integer.parseInt(request.getParameter("id")));
+                deleteRow(Integer.parseInt(request.getParameter("id")));
                 break;
             case "update":
-                updateRow(request, response);
+                updateRow(request);
                 break;
             case "insert":
-                insertRow(request, response);
+                insertRow(request);
                 break;
         }
     }

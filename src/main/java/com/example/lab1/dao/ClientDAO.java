@@ -32,29 +32,24 @@ public class ClientDAO implements Serializable {
         return allQuery.getResultList();
     }
 
-    public int removeById(Integer id){
+    public void removeById(Integer id){
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.remove(findByID(id));
         transaction.commit();
-
-        return 1;
     }
 
-    public int create(Client client){
+    public void create(Client client){
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(client);
         transaction.commit();
-
-        return 1;
     }
 
-    public int update(Client client){
+    public void update(Client client){
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.merge(client);
         transaction.commit();
-        return 1;
     }
 }

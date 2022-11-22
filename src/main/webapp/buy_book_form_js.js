@@ -1,64 +1,59 @@
 const action = localStorage.getItem("action");
-const id = localStorage.getItem("buyBookId")
+const id = localStorage.getItem("id")
 const button = document.getElementById("save_change");
-bookId = document.getElementById("bookId");
-clientId = document.getElementById("clientId");
-amount = document.getElementById("amount");
 
+const url = "http://localhost:8080/lab1-1.0-SNAPSHOT/buy-book";
+
+// Inputs
+bookIdElement = document.getElementById("bookId");
+clientIdElement = document.getElementById("clientId");
+amountElement = document.getElementById("amount");
+
+// Check how we ended up here
 if (action === "update"){
-    bookId.value = localStorage.getItem("bookId");
-    clientId.value = localStorage.getItem("clientId");
-    amount.value = localStorage.getItem("amount");
+    bookIdElement.value = localStorage.getItem("bookId");
+    clientIdElement.value = localStorage.getItem("clientId");
+    amountElement.value = localStorage.getItem("amount");
     localStorage.clear();
 } else if (action === "insert"){
     localStorage.clear();
 }
 
+const createPurchase = async (bookId, clientId, amount) => {
+    return fetch(url + "?action=insert", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            bookId: bookId,
+            clientId: clientId,
+            amount: amount,
+        })
+    });
+};
 
+const updatePurchase = async (id, bookId, clientId, amount) => {
+    return fetch(url + "?action=update", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            id : id,
+            bookId: bookId,
+            clientId: clientId,
+            amount: amount,
+        })
+    });
+};
 
 button.onclick = async function () {
     if (action === "update") {
-        let response = await fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/buy-book?action=update", {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                id : id,
-                bookId: bookId.value,
-                clientId: clientId.value,
-                amount: amount.value,
-            })
-        }).then(data => data.json());
-        console.log(response);
-        let success = response.success;
-        console.log(success);
-        if(success === "1"){
-            location.href="buy_book.html";
-        } else {
-            alert("Не удалось обновить книгу")
-        }
+        updatePurchase(id, bookIdElement.value, clientIdElement.value, amountElement.value).then(function(response){
+            if(response.ok) return response => response.json();
+            else throw new Error('Can\'t update purchase data');
+        }).then(_ => location.href = "buy_book.html").catch(reason => alert(reason));
     } else {
-        let response = await fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/buy-book?action=insert", {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                bookId: bookId.value,
-                clientId: clientId.value,
-                amount: amount.value,
-            })
-        }).then(function(response){
-            if(response.ok)
-            {
-                return response => response.json();
-            }
-            throw new Error('Something went wrong.');
-        }).catch(reason => alert(reason));
-        console.log(response);
-        let success = response.success;
-        console.log(success);
-        if(success === "1"){
-            location.href="buy_book.html";
-        } else {
-            alert("Не удалось добавить книгу")
-        }
+        createPurchase(bookIdElement.value, clientIdElement.value, amountElement.value).then(function (response) {
+            if (response.ok) return response => response.json();
+            else throw new Error('Can\'t add new purchase');
+        }).then(_ => location.href = "buy_book.html").catch(reason => alert(reason));
     }
-}
+};

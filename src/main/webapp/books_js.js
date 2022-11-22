@@ -1,5 +1,6 @@
 const button = document.getElementById("addBook");
 const returnButton = document.getElementById("returnOnMainPage");
+
 fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/GetTableServlet?table=book")
     .then(data => data.json())
     .then(data => {
@@ -20,13 +21,13 @@ fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/GetTableServlet?table=book")
         `
         data.map(value => {
             table_data += `<tr>
-            <td>${value.bookId}</td>
+            <td>${value.id}</td>
             <td>${value.title}</td>
             <td>${value.authorName}</td>
             <td>${value.genre}</td>
             <td>${value.price}</td>
-            <td> <a id="delete${value.bookId}" onclick="window.delete_book(${value.bookId})"> Удалить книгу </a></td>
-            <td> <a id="update${value.bookId}" onclick="window.update_book(${value.bookId}, \'${value.title}\', \'${value.authorName}\',
+            <td> <a id="delete${value.id}" onclick="window.delete_book(${value.id})"> Удалить книгу </a></td>
+            <td> <a id="update${value.id}" onclick="window.update_book(${value.id}, \'${value.title}\', \'${value.authorName}\',
                                                                            \'${value.genre}\', ${value.price})"> Изменить книгу </td>
             </tr>`;
         });
@@ -34,9 +35,9 @@ fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/GetTableServlet?table=book")
         document.getElementById("books-body").innerHTML=table_data;
     })
 
-function update_book(bookId, title, authorName, genre, price){
+function update_book(id, title, authorName, genre, price){
     localStorage.setItem("action", "update");
-    localStorage.setItem("bookId", bookId);
+    localStorage.setItem("id", id);
     localStorage.setItem("title", title);
     localStorage.setItem("authorName", authorName);
     localStorage.setItem("genre", genre);
@@ -44,22 +45,21 @@ function update_book(bookId, title, authorName, genre, price){
     location.href="book_form.html";
 }
 
-async function delete_book(bookId) {
-    console.log("удаление книги с ID " + bookId);
+async function delete_book(id) {
+    console.log("удаление книги с ID " + id);
 
-    let response = await fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/books?action=delete&id=" + bookId, {
+    await fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/books?action=delete&id=" + id, {
         method: "POST"
-    }).then(data => data.json());
-    console.log(response);
-    let success = response.success;
-    console.log(success);
-    if (success === "1"){
-        let delete_row = document.getElementById("delete" + bookId);
-        delete_row = delete_row.closest("tr");
-        delete_row.remove();
-    } else {
-        alert("Не удалось удалить строку");
-    }
+    }).then(function(response){
+                if(response.ok){
+                    let delete_row = document.getElementById("delete" + id);
+                    delete_row = delete_row.closest("tr");
+                    delete_row.remove();
+                    return response => response.json();
+                }
+                else throw new Error('Can\'t delete book');
+            })
+    .catch(reason => alert(reason));
 }
 
 button.onclick = function () {

@@ -22,7 +22,7 @@ Promise.all([
         `
             data.map(value => {
                 table_data += `<tr>
-            <td>${value.bookId}</td>
+            <td>${value.id}</td>
             <td>${value.title}</td>
             <td>${value.authorName}</td>
             <td>${value.genre}</td>
@@ -50,16 +50,15 @@ Promise.all([
         `
             data.map(value => {
                 table_data += `<tr>
-            <td>${value.clientId}</td>
-            <td>${value.clientName}</td>
-            <td>${value.cityName}</td>
-            <td>${value.clientEmail}</td>
+            <td>${value.id}</td>
+            <td>${value.name}</td>
+            <td>${value.city}</td>
+            <td>${value.email}</td>
             </tr>`;
             });
             table.insertAdjacentHTML("afterbegin", table_head)
             document.getElementById("clients-body").innerHTML=table_data;
         }),
-
     fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/GetTableServlet?table=order")
         .then(data => data.json())
         .then(data => {
@@ -77,7 +76,7 @@ Promise.all([
         `
             data.map(value => {
                 table_data += `<tr>
-            <td>${value.buyBookId}</td>
+            <td>${value.id}</td>
             <td>${value.bookId}</td>
             <td>${value.clientId}</td>
             <td>${value.amount}</td>

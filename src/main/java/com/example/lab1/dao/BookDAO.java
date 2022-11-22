@@ -34,28 +34,24 @@ public class BookDAO implements Serializable {
         return allQuery.getResultList();
     }
 
-    public int removeById(Integer id) {
+    public void removeById(Integer id) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.remove(findByID(id));
         transaction.commit();
-
-        return 1;
     }
 
-    public int create(Book book){
+    public void create(Book book){
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(book);
         transaction.commit();
-        return 1;
     }
 
-    public int update(Book book){
+    public void update(Book book){
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.merge(book);
         transaction.commit();
-        return 1;
     }
 }

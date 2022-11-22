@@ -18,7 +18,6 @@ public class PurchaseServlet extends HttpServlet {
     @Inject
     private PurchaseDAO purchaseDAO;
 
-
     private void send(int status, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
@@ -27,12 +26,11 @@ public class PurchaseServlet extends HttpServlet {
         out.flush();
     }
 
-    private void deleteRow(HttpServletRequest request, HttpServletResponse response, int id) throws IOException {
-        int result = purchaseDAO.removeById(id);
-        send(result, response);
+    private void deleteRow(int id) {
+        purchaseDAO.removeById(id);
     }
 
-    private void updateRow(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void updateRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
 
@@ -40,12 +38,10 @@ public class PurchaseServlet extends HttpServlet {
         purchase.update(obj.getInt("bookId"), obj.getInt("clientId"),
                 obj.getInt("amount"));
 
-        int result = purchaseDAO.update(purchase);
-
-        send(result, response);
+        purchaseDAO.update(purchase);
     }
 
-    private void insertRow(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void insertRow(HttpServletRequest request) throws IOException {
         String requestData = request.getReader().lines().collect(Collectors.joining());
         JSONObject obj = new JSONObject(requestData);
 
@@ -53,9 +49,7 @@ public class PurchaseServlet extends HttpServlet {
         purchase.update(obj.getInt("bookId"), obj.getInt("clientId"),
                 obj.getInt("amount"));
 
-        int result = purchaseDAO.create(purchase);
-
-        send(result, response);
+        purchaseDAO.create(purchase);
     }
 
     @Override
@@ -64,20 +58,19 @@ public class PurchaseServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String action = request.getParameter("action");
         switch (action){
             case "delete":
-                deleteRow(request, response, Integer.parseInt(request.getParameter("id")));
+                deleteRow(Integer.parseInt(request.getParameter("id")));
                 break;
             case "update":
-                updateRow(request, response);
+                updateRow(request);
                 break;
             case "insert":
-                insertRow(request, response);
+                insertRow(request);
                 break;
         }
-
     }
 }

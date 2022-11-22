@@ -20,12 +20,12 @@ fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/GetTableServlet?table=order")
         `
         data.map(value => {
             table_data += `<tr>
-            <td>${value.buyBookId}</td>
+            <td>${value.id}</td>
             <td>${value.bookId}</td>
             <td>${value.clientId}</td>
             <td>${value.amount}</td>
-            <td> <a id="delete${value.buyBookId}" onclick="window.delete_buy_book(${value.buyBookId})"> Удалить заказ </a></td>
-            <td> <a id="update${value.buyBookId}" onclick="window.update_buy_book(${value.buyBookId}, ${value.bookId},
+            <td> <a id="delete${value.id}" onclick="window.delete_buy_book(${value.id})"> Удалить заказ </a></td>
+            <td> <a id="update${value.id}" onclick="window.update_buy_book(${value.id}, ${value.bookId},
                                                                               ${value.clientId}, ${value.amount})"> Изменить заказ </td>
             </tr>`;
         });
@@ -33,27 +33,28 @@ fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/GetTableServlet?table=order")
         document.getElementById("buy-books-body").innerHTML=table_data;
     })
 
-function update_buy_book(buyBookId, bookId, clientId, amount){
+function update_buy_book(id, bookId, clientId, amount){
     localStorage.setItem("action", "update");
-    localStorage.setItem("buyBookId", buyBookId);
+    localStorage.setItem("id", id);
     localStorage.setItem("bookId", bookId);
     localStorage.setItem("clientId", clientId);
     localStorage.setItem("amount", amount);
     location.href="buy_book_form.html";
 }
 
-async function delete_buy_book(buyBookId) {
-    let response = await fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/buy-book?action=delete&id=" + buyBookId, {
+async function delete_buy_book(id) {
+    await fetch("http://localhost:8080/lab1-1.0-SNAPSHOT/buy-book?action=delete&id=" + id, {
         method: "POST"
-    }).then(data => data.json());
-    let success = response.success;
-    if (success === "1"){
-        let delete_row = document.getElementById("delete" + buyBookId);
-        delete_row = delete_row.closest("tr");
-        delete_row.remove();
-    } else {
-        alert("Не удалось удалить строку");
-    }
+    }).then(function(response){
+        if(response.ok){
+            let delete_row = document.getElementById("delete" + id);
+            delete_row = delete_row.closest("tr");
+            delete_row.remove();
+            return response => response.json();
+        }
+        else throw new Error('Can\'t delete purchase');
+    })
+        .catch(reason => alert(reason));
 }
 
 button.onclick = function () {
